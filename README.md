@@ -10,7 +10,7 @@ This project demonstrates a Man-in-the-Middle (MITM) attack in a Kubernetes envi
    cd kubernetes-mitm-proxy
 
 
-2. Deploy the service
+2. Deploy the service:
    kubectl apply -f backend-deployment.yaml
    kubectl apply -f frontend-deployment.yaml
    kubectl apply -f mitm-deployment.yaml
