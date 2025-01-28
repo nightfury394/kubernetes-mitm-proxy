@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: frontend
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: nginx
+          ports:
+            - containerPort: 3000
+          env:
+            - name: http_proxy
+              value: "http://mitm-proxy:8080"
+            - name: https_proxy
+              value: "http://mitm-proxy:8080"
+            - name: HTTP_PROXY
+              value: "http://mitm-proxy:8080"
+            - name: HTTPS_PROXY
+              value: "http://mitm-proxy:8080"
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: html-volume
+      volumes:
+        - name: html-volume
+          configMap:
+            name: frontend-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+data:
+  index.html: |
+    <html>
+    <head><title>Frontend</title></head>
+    <body>
+      <h1>Hello from Frontend!</h1>
+    </body>
+    </html>
+
+                                                                                                                                                                            62,0-1        Bot
+
+
