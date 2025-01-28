@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mitm-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mitm-proxy
+  template:
+    metadata:
+      labels:
+        app: mitm-proxy
+    spec:
+      containers:
+        - name: mitmproxy
+          image: mitmproxy/mitmproxy
+          command: ["mitmdump", "-m", "transparent"]
+          ports:
+            - containerPort: 8080                     
